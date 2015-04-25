@@ -3,12 +3,20 @@ module.exports = function(grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
     concat: {
-      dist: {
+      lib: {
         src: [
-          'public/lib/*.js',
+          'public/lib/jquery.js',
+          'public/lib/underscore.js',
+          'public/lib/backbone.js',
+          'public/lib/handlebars.js'
+        ],
+        dest: 'public/dist/prodLib.js'
+      },
+      client: {
+        src: [
           'public/client/*.js'
         ],
-        dest: 'public/dist/production.js',
+        dest: 'public/dist/prodClient.js'
       }
     },
 
@@ -28,9 +36,13 @@ module.exports = function(grunt) {
     },
 
     uglify: {
-      build: {
-        src: 'public/dist/production.js',
-        dest: 'public/dist/production.min.js'
+      lib: {
+        src: 'public/dist/prodLib.js',
+        dest: 'public/dist/prodLib.min.js'
+      },
+      client: {
+        src: 'public/dist/prodClient.js',
+        dest: 'public/dist/prodClient.min.js'
       }
     },
 
