@@ -9,6 +9,7 @@ var app = express();
 app.configure(function() {
   app.set('views', __dirname + '/views');
   app.set('view engine', 'ejs');
+  // app.set('port', process.env.PORT || 3000);
   app.use(partials());
   app.use(express.bodyParser());
   app.use(express.static(__dirname + '/public'));
