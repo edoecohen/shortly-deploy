@@ -1,19 +1,30 @@
-var db = require('../config');
+var mongoose = require('mongoose');
 var crypto = require('crypto');
 
-var Link = db.Model.extend({
-  tableName: 'urls',
-  hasTimestamps: true,
-  defaults: {
-    visits: 0
-  },
-  initialize: function(){
-    this.on('creating', function(model, attrs, options){
-      var shasum = crypto.createHash('sha1');
-      shasum.update(model.get('url'));
-      model.set('code', shasum.digest('hex').slice(0, 5));
-    });
-  }
+// Define the schema for Links
+var linkSchema = mongoose.Schema({
+  url: String,
+  base_url: String,
+  code: String,
+  title: String,
+  visits: Number
+});
+
+// Save into a mongoose model
+var Link = mongoose.model('Link', linkSchema);
+
+
+// create a function that return a hash for the url
+var createSha = function(url){
+  var shasum = crypto.createHash('sha1');
+  shasum.update(url);
+  return shasum.digest('hex').slice(0, 5);
+}
+
+// Everytime, before save into the database, invoke the createSha function
+linkSchema.pre('save', function(next){
+  this.code = createSha(this.url);
+  next();
 });
 
 module.exports = Link;
